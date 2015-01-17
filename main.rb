@@ -1,7 +1,7 @@
 Player = Struct.new(:name)
 
 class Game 
-	$table = Array.new(3, Array.new(3, ' '))
+	$table = Array.new(3){ Array.new(3){' '} }
 	def initialize
 
 		puts "Welcome to the game!"
@@ -28,7 +28,14 @@ class Game
 	end
 
 	def CheckAnswer answer
-		puts "Woops something bad's going on in here!" unless answer =~ /^[abc][123]$/
+		puts "Woops something bad's going on in here!" unless answer =~ /^[abcABC][123]$/
+
+		row, column = answer.split ""
+		row = row.upcase.ord - 65
+		column = column.to_i - 1
+		$table[row][column] = @currentPlayer
+		self.DrawTable
+
 	end
 
 	def DrawTable
