@@ -9,23 +9,26 @@ class Game
 		@o = Player.new("0")
 		@x = Player.new("X")
 
-		puts "You are 0!"
 		@currentPlayer = @o.name
+		puts "You are #{@currentPlayer}!"
 
 		self.Question
-
 	end
 
 
 	def Question
 		self.DrawTable
 		puts "\n\nIt's #{@currentPlayer}'s turn!"
-
 		puts "Where would you like to move? (Ex: A1, A2, etc):"
 
 		answer = gets.chomp
+		self.CheckAnswer answer
 
 		@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
+	end
+
+	def CheckAnswer answer
+		puts "Woops something bad's going on in here!" unless answer =~ /^[abc][123]$/
 	end
 
 	def DrawTable
