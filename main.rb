@@ -18,13 +18,13 @@ class Game
 
 	def Question
 		self.DrawTable
+
 		puts "\n\nIt's #{@currentPlayer}'s turn!"
 		puts "Where would you like to move? (Ex: A1, A2, etc):"
 
 		answer = gets.chomp
 		self.CheckAnswer answer
 
-		@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
 	end
 
 	def CheckAnswer answer
@@ -34,8 +34,16 @@ class Game
 		row = row.upcase.ord - 65
 		column = column.to_i - 1
 		$table[row][column] = @currentPlayer
-		self.DrawTable
+		if self.GameOver
+			puts "Yay! #{@currentPlayer} won the game"
+		else
+			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
+			self.Question
+		end
+	end
 
+	def GameOver
+		false
 	end
 
 	def DrawTable
