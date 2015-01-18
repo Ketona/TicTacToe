@@ -48,7 +48,8 @@ class Game
 
 	def CheckResult
 		if self.GameOver
-			puts "Yay! #{@currentPlayer} won the game"
+			self.DrawTable
+			puts "\nYay! #{@currentPlayer} won the game"
 		elsif self.CheckDraw
 			puts 'Draw!'
 		else
@@ -75,7 +76,17 @@ class Game
 	end
 
 	def GameOver
-		false
+		key = @currentPlayer.ord * 3
+		over = false
+		#cheking rows
+		$table.each do |x|
+			over = true if x.join().split('').map(&:ord).inject(:+) == key
+		end
+		#cheking columns
+		$table.transpose.each do |x|
+			over = true if x.join().split('').map(&:ord).inject(:+) == key
+		end
+		over
 	end
 
 	def DrawTable
