@@ -16,7 +16,7 @@ class Game
 		self.Question
 	end
 
-	def Question params = ""
+	def Question params = ''
 		self.DrawTable
 
 		puts "\n\nIt's #{params}#{@currentPlayer}'s turn!"
@@ -34,7 +34,7 @@ class Game
 			self.Question 'still '
 		else
 			#split answer into the row and column values
-			row, column = answer.split ""
+			row, column = answer.split ''
 			row = row.upcase.ord - 65
 			column = column.to_i - 1
 
@@ -80,12 +80,14 @@ class Game
 		over = false
 		#cheking rows
 		$table.each do |x|
-			over = true if x.join().split('').map(&:ord).inject(:+) == key
+			over = true if x.join.split('').map(&:ord).inject(:+) == key
 		end
 		#cheking columns
 		$table.transpose.each do |x|
-			over = true if x.join().split('').map(&:ord).inject(:+) == key
+			over = true if x.join.split('').map(&:ord).inject(:+) == key
 		end
+		#chekin diagonals
+		 over = true if $table.flatten.values_at(0, 4, 8).join.split('').map(&:ord).inject(:+) == key || $table.flatten.values_at(0, 4, 8).join.split('').map(&:ord).inject(:+) == key
 		over
 	end
 
