@@ -33,10 +33,16 @@ class Game
 		row, column = answer.split ""
 		row = row.upcase.ord - 65
 		column = column.to_i - 1
-		$table[row][column] = @currentPlayer
+		if $table[row][column] == " "
+			$table[row][column] = @currentPlayer
+		else
+			puts "Heey bro, the place is taken"
+			self.Question
+		end
 		if self.GameOver
 			puts "Yay! #{@currentPlayer} won the game"
 		else
+			#puts "Draw!" unless $table.assoc " "
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
 			self.Question
 		end
