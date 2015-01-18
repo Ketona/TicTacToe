@@ -28,11 +28,13 @@ class Game
 	end
 
 	def CheckAnswer answer
+		#check is the answer is in correct format
 		unless answer =~ /^[abcABC][123]$/
 			puts "Woops something bad's going on in here!"
 			self.Question "still "
 		end
 
+		#split answer into the row and column values
 		row, column = answer.split ""
 		row = row.upcase.ord - 65
 		column = column.to_i - 1
@@ -47,19 +49,28 @@ class Game
 	def CheckResult
 		if self.GameOver
 			puts "Yay! #{@currentPlayer} won the game"
+		elsif self.CheckDraw
+			puts "Draw!"
 		else
-			#puts "Draw!" unless $table.assoc " "
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
 			self.Question
 		end
+	end
+
+	def CheckDraw
+		draw = true
+		$table.each do |item|
+			item.each {|x| draw = false if x == ' '}
+		end
+		draw
 	end
 
 	def CheckPlaceTaken row, column
 		if $table[row][column] == " "
 			$table[row][column] = @currentPlayer
 		else
-			puts "Heey bro, the place is taken"
-			self.Question
+			puts "Sorry bro, the place is taken"
+			self.Question "still "
 		end
 	end
 
@@ -74,9 +85,10 @@ class Game
 			counter += 1
 			puts "\n-----" if counter < 3
 		end
+		p $table
 	end
 end
 
-game = Game.new
+Game.new
 
 
