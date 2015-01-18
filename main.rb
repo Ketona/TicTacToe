@@ -2,7 +2,7 @@ Player = Struct.new(:name)
 
 class Game 
 	$table = Array.new(3){ Array.new(3){' '} }
-
+	@@counter = 1
 	def initialize
 
 		puts "Welcome to the game!"
@@ -53,16 +53,13 @@ class Game
 			puts "Draw!"
 		else
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
+			@@counter += 1
 			self.Question
 		end
 	end
 
 	def CheckDraw
-		draw = true
-		$table.each do |item|
-			item.each {|x| draw = false if x == ' '}
-		end
-		draw
+		@@counter == 9 ? true : false
 	end
 
 	def CheckPlaceTaken row, column
