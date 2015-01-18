@@ -5,10 +5,10 @@ class Game
 	@@counter = 1
 	def initialize
 
-		puts "Welcome to the game!"
+		puts 'Welcome to the game!'
 
-		@o = Player.new("0")
-		@x = Player.new("X")
+		@o = Player.new('0')
+		@x = Player.new('X')
 
 		@currentPlayer = @o.name
 		puts "You are #{@currentPlayer}!"
@@ -20,7 +20,7 @@ class Game
 		self.DrawTable
 
 		puts "\n\nIt's #{params}#{@currentPlayer}'s turn!"
-		puts "Where would you like to move? (Ex: A1, A2, etc):"
+		puts 'Where would you like to move? (Ex: A1, A2, etc):'
 
 		answer = gets.chomp
 		self.CheckAnswer answer
@@ -31,26 +31,26 @@ class Game
 		#check is the answer is in correct format
 		unless answer =~ /^[abcABC][123]$/
 			puts "Woops something bad's going on in here!"
-			self.Question "still "
+			self.Question 'still '
+		else
+			#split answer into the row and column values
+			row, column = answer.split ""
+			row = row.upcase.ord - 65
+			column = column.to_i - 1
+
+			#checkin if the place is already taken
+			unless self.CheckPlaceTaken row, column
+				#checkin is the game should continue
+				self.CheckResult
+			end
 		end
-
-		#split answer into the row and column values
-		row, column = answer.split ""
-		row = row.upcase.ord - 65
-		column = column.to_i - 1
-
-		#checkin if the place is already taken
-		self.CheckPlaceTaken row, column
-
-		#checkin is the game should continue
-		self.CheckResult
 	end
 
 	def CheckResult
 		if self.GameOver
 			puts "Yay! #{@currentPlayer} won the game"
 		elsif self.CheckDraw
-			puts "Draw!"
+			puts 'Draw!'
 		else
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
 			@@counter += 1
@@ -63,12 +63,15 @@ class Game
 	end
 
 	def CheckPlaceTaken row, column
+		taken = false
 		if $table[row][column] == " "
 			$table[row][column] = @currentPlayer
 		else
-			puts "Sorry bro, the place is taken"
-			self.Question "still "
+			puts 'Sorry bro, the place is taken'
+			self.Question 'still '
+			taken = true
 		end
+		taken
 	end
 
 	def GameOver
@@ -82,7 +85,6 @@ class Game
 			counter += 1
 			puts "\n-----" if counter < 3
 		end
-		p $table
 	end
 end
 
