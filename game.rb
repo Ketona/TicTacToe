@@ -1,3 +1,5 @@
+Player = Struct.new(:name)
+
 class Game
   @@table = Array.new(3){ Array.new(3){' '} }
   @@counter = 1
