@@ -2,6 +2,7 @@ Player = Struct.new(:name)
 
 class Game 
 	$table = Array.new(3){ Array.new(3){' '} }
+
 	def initialize
 
 		puts "Welcome to the game!"
@@ -14,7 +15,6 @@ class Game
 
 		self.Question
 	end
-
 
 	def Question
 		self.DrawTable
@@ -33,17 +33,29 @@ class Game
 		row, column = answer.split ""
 		row = row.upcase.ord - 65
 		column = column.to_i - 1
-		if $table[row][column] == " "
-			$table[row][column] = @currentPlayer
-		else
-			puts "Heey bro, the place is taken"
-			self.Question
-		end
+
+		#checkin if the place is already taken
+		self.CheckPlaceTaken row, column
+
+		#checkin is the game should continue
+		self.CheckResult
+	end
+
+	def CheckResult
 		if self.GameOver
 			puts "Yay! #{@currentPlayer} won the game"
 		else
 			#puts "Draw!" unless $table.assoc " "
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
+			self.Question
+		end
+	end
+
+	def CheckPlaceTaken row, column
+		if $table[row][column] == " "
+			$table[row][column] = @currentPlayer
+		else
+			puts "Heey bro, the place is taken"
 			self.Question
 		end
 	end
