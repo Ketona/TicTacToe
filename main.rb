@@ -1,7 +1,7 @@
 Player = Struct.new(:name)
 
 class Game 
-	$table = Array.new(3){ Array.new(3){' '} }
+	@@table = Array.new(3){ Array.new(3){' '} }
 	@@counter = 1
 	def initialize
 
@@ -22,9 +22,7 @@ class Game
 		puts "\n\nIt's #{params}#{@currentPlayer}'s turn!"
 		puts 'Where would you like to move? (Ex: A1, A2, etc):'
 
-		answer = gets.chomp
-		self.CheckAnswer answer
-
+		self.CheckAnswer gets.chomp
 	end
 
 	def CheckAnswer answer
@@ -51,10 +49,12 @@ class Game
 			self.DrawTable
 			puts "\nYay! #{@currentPlayer} won the game"
 		elsif self.CheckDraw
+			self.DrawTable
 			puts 'Draw!'
 		else
+			#switching the player
 			@currentPlayer = @currentPlayer == @x.name ? @o.name : @x.name
-			@@counter += 1
+			@@counter += 1 #counting the turns
 			self.Question
 		end
 	end
@@ -65,8 +65,8 @@ class Game
 
 	def CheckPlaceTaken row, column
 		taken = false
-		if $table[row][column] == " "
-			$table[row][column] = @currentPlayer
+		if @@table[row][column] == ' '
+			@@table[row][column] = @currentPlayer
 		else
 			puts 'Sorry bro, the place is taken'
 			self.Question 'still '
@@ -79,24 +79,28 @@ class Game
 		key = @currentPlayer.ord * 3
 		over = false
 		#cheking rows
-		$table.each do |x|
-			over = true if x.join.split('').map(&:ord).inject(:+) == key
+		@@table.each do |x|
+			over = true if self.GetKey(x) == key
 		end
 		#cheking columns
-		$table.transpose.each do |x|
-			over = true if x.join.split('').map(&:ord).inject(:+) == key
+		@@table.transpose.each do |x|
+			over = true if self.GetKey(x) == key
 		end
 		#chekin diagonals
-		 over = true if $table.flatten.values_at(0, 4, 8).join.split('').map(&:ord).inject(:+) == key || $table.flatten.values_at(0, 4, 8).join.split('').map(&:ord).inject(:+) == key
+		 over = true if self.GetKey(@@table.flatten.values_at(2, 4, 6)) == key || GetKey(@@table.flatten.values_at(0, 4, 8)) == key
 		over
 	end
 
+	def GetKey param
+		param.join.split('').map(&:ord).inject(:+)
+	end
+
 	def DrawTable
-		counter = 0
-		$table.each do |item|
+		countLines = 0
+		@@table.each do |item|
 			print item * '|'
-			counter += 1
-			puts "\n-----" if counter < 3
+			countLines += 1
+			puts "\n-----" if countLines < 3
 		end
 	end
 end
