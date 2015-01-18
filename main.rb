@@ -16,10 +16,10 @@ class Game
 		self.Question
 	end
 
-	def Question
+	def Question params = ""
 		self.DrawTable
 
-		puts "\n\nIt's #{@currentPlayer}'s turn!"
+		puts "\n\nIt's #{params}#{@currentPlayer}'s turn!"
 		puts "Where would you like to move? (Ex: A1, A2, etc):"
 
 		answer = gets.chomp
@@ -28,7 +28,10 @@ class Game
 	end
 
 	def CheckAnswer answer
-		puts "Woops something bad's going on in here!" unless answer =~ /^[abcABC][123]$/
+		unless answer =~ /^[abcABC][123]$/
+			puts "Woops something bad's going on in here!"
+			self.Question "still "
+		end
 
 		row, column = answer.split ""
 		row = row.upcase.ord - 65
